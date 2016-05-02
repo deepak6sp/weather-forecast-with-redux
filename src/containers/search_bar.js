@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { getWeather } from '../actions/index';
 
 class SearchBar extends Component{
 	constructor(props){
@@ -6,18 +9,18 @@ class SearchBar extends Component{
 		this.state = {country : ''};
 	}
 	onChangeInputHandler(e){
-		console.log(e.target.value);
-
 		this.setState({country : e.target.value});
 
 	}
 	onFormSubmit(e){
 		e.preventDefault();
+		this.props.getWeather(this.state.country);
+		this.setState({ country : ''});
 
 	}
 	render(){
 		return (
-			<form onSubmit ={this.onFormSubmit} className="form-inline">
+			<form onSubmit ={this.onFormSubmit.bind(this)} className="form-inline">
 				  <div className="form-group">
 				    <input 
 				    	type="text" 
@@ -32,5 +35,8 @@ class SearchBar extends Component{
 	}
 }
 
+function mapDispathToProps(dispatch){
+	return bindActionCreators({ getWeather }, dispatch);
+}
 
-export default  SearchBar;
+export default connect (null, mapDispathToProps)(SearchBar);
